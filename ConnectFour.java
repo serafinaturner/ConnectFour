@@ -55,10 +55,14 @@ public class ConnectFour implements BoardGame{
      * @param column the column number
      * @return false if there is room for another move in the column, true if not.
      */
-    public boolean columnFull(int column){
-    	return false;
+   public boolean columnFull(int column){
+    	boolean full = true;
+    	for(int i = 0; i < board[column].length; i++) {
+    		if(board[column][i] == 0)
+    			full = false;
+    	}
+    	return full;
     }
-    
     /**
      * Change the game to reflect the current player placing a piece in the column.
      * @param column the column number
