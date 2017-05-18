@@ -39,7 +39,18 @@ public class ConnectFour implements BoardGame{
      * @return 0 if there is no winner, 1 if the first player is a winner, 2 if the second player is a winner.
      */
     public int getWinner(){
-    	return 0;
+    	 //start of winner via row
+    	for(int k = 0; k < board.length; k++) {
+    		for(int i = 0; i <= 4; i++) {
+    			if(board[k][i] == board[k][i+1] && board[k][i+1] == board[k][i+2] && board[k][i+2] == board[k][i+3]) {
+    				if(board[k][i+3] != 0)
+    					winner = board[k][i+3];
+    			}
+    		}
+    	}
+    	//end of winner via row
+	    
+	    return 0;
     }
     
     /**
