@@ -16,14 +16,19 @@ public class ConnectFour implements BoardGame{
 		board = new int[7][6];
 		winningPositions = new Position[4]; //does this  work?
 		currentPlayer = 0;
-		winner = 0;
 	}
 	
 	 /**
      * Prepares the board for a new game.7
      */
 	public void newGame(){
-		
+		for(int[] i : board) {
+			for(int k : i)
+				i[k] = 0;
+		}
+		winner = 0;
+		winningPositions = new Position[4];
+		currentPlayer = 1;
 	}
 	
 	/**
@@ -31,7 +36,17 @@ public class ConnectFour implements BoardGame{
     * @return true if the game is over, false otherwise
     */
     public boolean gameOver(){
-    	return false;
+    	    	boolean column = true;
+    	for(int i = 0; i < 7; i++) {
+    		if(!(columnFull(i)))
+    			column = false;
+    	}
+    	if(getWinner() != 0 || column == true) {
+    		winner = getWinner();
+    		return true;
+    	}
+    	else
+    		return false;
     }
 	
     /**
@@ -39,18 +54,68 @@ public class ConnectFour implements BoardGame{
      * @return 0 if there is no winner, 1 if the first player is a winner, 2 if the second player is a winner.
      */
     public int getWinner(){
-    	 //start of winner via row
+
+    	//start of winner via row
     	for(int k = 0; k < board.length; k++) {
-    		for(int i = 0; i <= 4; i++) {
+    		for(int i = 0; i < 4; i++) {
     			if(board[k][i] == board[k][i+1] && board[k][i+1] == board[k][i+2] && board[k][i+2] == board[k][i+3]) {
-    				if(board[k][i+3] != 0)
+    				if(board[k][i+3] != 0) {
     					winner = board[k][i+3];
+    					winningPositions[0] = new Position(k, i);
+    					winningPositions[1] = new Position(k, i+1);
+    					winningPositions[2] = new Position(k, i+2);
+    					winningPositions[3] = new Position(k, i+3);
+    				}
     			}
     		}
     	}
     	//end of winner via row
-	    
-	    return 0;
+    	
+    	//start of winner via column
+    	for(int j = 0; j < board.length; j++) {
+    		for(int h = 0; h < 3; h++) {
+    			if(board[j][h] == board[j+1][h] && board[j+1][h] == board[j+2][h] && board[j+2][h] == board[j+3][h]) {
+    				if(board[j+2][h] != 0) {
+    					winner = board[j+2][h];
+    					winningPositions[0] = new Position(j, h);
+    					winningPositions[1] = new Position(j+1, h);
+    					winningPositions[2] = new Position(j+2, h);
+    					winningPositions[3] = new Position(j+3, h);
+    				}
+    			}
+    		}
+    	}
+    	//end of winner via column
+    	
+    	//start of winner via left diagonal 
+    	for(int k = 0; k < 3; k++) {
+    		for(int i = 3; i < board[0].length; i++) {
+    			if(board[k][i] == board[k+1][i-1] && board[k+1][i-1] == board[k+2][i-2] && board[k+2][i-2] == board[k+3][i-3] && board[k][i] != 0) {
+    				winner = board[k][i];
+    				winningPositions[0] = new Position(k, i);
+    				winningPositions[1] = new Position(k+1, i-1);
+    				winningPositions[2] = new Position(k+2, i-2);
+    				winningPositions[3] = new Position(k+3, i-3);
+    			}
+    		}
+    	}
+    	//end of winner via left diagonal
+    	
+    	//start of winner via right diagonal
+    	for(int k = 0; k < 3; k++) {
+    		for(int i = 0; i < 4; i++) {
+    			if(board[k][i] == board[k+1][i+1] && board[k+1][i+1] == board[k+2][i+2] && board[k+2][i+2] == board[k+3][i+3] && board[k][i] != 0) {
+    				winner = board[k][i];
+    				winningPositions[0] = new Position(k, i);
+    				winningPositions[1] = new Position(k+1, i+1);
+    				winningPositions[2] = new Position(k+2, i+2);
+    				winningPositions[3] = new Position(k+3, i+3);
+    			}
+    		}
+    	}
+    	//end of winner via right diagonal
+    	
+    	return winner;
     }
     
     /**
@@ -58,7 +123,7 @@ public class ConnectFour implements BoardGame{
      * @return the locations of the pieces that determine the game winner.
      */
     public Position[] getWinningPositions(){
-    	return null;
+    	return winningPositions;
     }
     
     /**
@@ -79,7 +144,16 @@ public class ConnectFour implements BoardGame{
      * @param column the column number
      */
     public void play(int column){
-    	
+    	    	if(!(columnFull(column))) {
+    		for(int k = 0; k < board.length; k++) {
+    			if(board[k][column] == 0)
+    				board[k][column] = currentPlayer;
+    		}
+    	}
+    	if(currentPlayer == 1)
+    		currentPlayer = 2;
+    	else 
+    		currentPlayer = 1;
     }
     
 	 /**
@@ -90,6 +164,6 @@ public class ConnectFour implements BoardGame{
 	 *   2 if it is filled by the second player's piece.
      */
     public int[][] getBoard(){
-    	return null;
+    	return board;
     }
 }
